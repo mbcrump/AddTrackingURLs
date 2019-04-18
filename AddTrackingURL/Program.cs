@@ -27,7 +27,7 @@ namespace AddTrackingURL
                     var fileName = Path.GetFileName(path);
                    
 
-                    var newPath = Path.Combine(dir + "\\output\\", fileName + ".bak");
+                    var newPath = Path.Combine(dir + "\\output\\", fileName);
                     File.Copy(path, newPath, true);
 
                     fixUrlFromPath(newPath);
@@ -58,7 +58,7 @@ namespace AddTrackingURL
                 foreach (Match m in linkParser.Matches(line))
                 {
                     //Console.WriteLine(m.Value);
-                    if (m.Value.Contains("azure.microsoft.com"))
+                    if (m.Value.Contains("azure.microsoft.com") || m.Value.Contains("azuremarketplace.microsoft.com"))
                     { 
                         ReplaceText(filePath, m.Value, m.Value + "?WT.mc_id=azure-azuretipsandtricks-micrum");
                     }
@@ -69,6 +69,29 @@ namespace AddTrackingURL
                     else if (m.Value.Contains("github.com"))
                     {
                         ReplaceText(filePath, m.Value, m.Value + "?WT.mc_id=github-azuretipsandtricks-micrum");
+                    }
+                    else if (m.Value.Contains("channel9.msdn.com"))
+                    {
+                        ReplaceText(filePath, m.Value, m.Value + "?WT.mc_id=ch9-azuretipsandtricks-micrum");
+                    }
+                    else if (m.Value.Contains("aka.ms"))
+                    {
+                        ReplaceText(filePath, m.Value, m.Value + "?WT.mc_id=akams-azuretipsandtricks-micrum");
+                    }
+                    else if (m.Value.Contains("nuget.org"))
+                    {
+                        ReplaceText(filePath, m.Value, m.Value + "?WT.mc_id=nuget-azuretipsandtricks-micrum");
+                    }
+                    else if (m.Value.Contains("twitter.com"))
+                    {
+                        ReplaceText(filePath, m.Value, m.Value + "?WT.mc_id=twitter-azuretipsandtricks-micrum");
+                    }
+                    else
+                    {
+                        Console.ForegroundColor = ConsoleColor.Red;
+                        Console.WriteLine("Not Found: " + m.Value);
+                        Console.ForegroundColor = ConsoleColor.Red;
+                        Console.ResetColor();
                     }
 
                 }
