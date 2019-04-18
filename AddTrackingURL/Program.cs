@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Text.RegularExpressions;
 
@@ -45,26 +46,21 @@ namespace AddTrackingURL
 
         static void fixUrlFromPath(string filePath)
         {
-            var linkParser = new Regex(@"\b(?:https?://|www\.)\S+\b", RegexOptions.Compiled | RegexOptions.IgnoreCase);
-           
-            string[] lines = File.ReadAllLines(filePath);
+            var linkParser = new Regex(@"\b(?:https?://|www\.)\S+\b", RegexOptions.IgnorePatternWhitespace | RegexOptions.IgnoreCase);
 
-            int count = 0;
+            // Open the file to read from.
+            string readText = File.ReadAllText(filePath);
 
-            foreach (string line in lines)
-            {
-                count++;
-
-                foreach (Match m in linkParser.Matches(line))
+                foreach (Match m in linkParser.Matches(readText))
                 {
                     //Console.WriteLine(m.Value);
                     if (m.Value.Contains("azure.microsoft.com") || m.Value.Contains("azuremarketplace.microsoft.com"))
                     { 
-                        ReplaceText(filePath, m.Value, m.Value + "?WT.mc_id=azure-azuretipsandtricks-micrum");
+                        ReplaceText(filePath, "(" + m.Value + ")", "(" + m.Value  + "?WT.mc_id=azure-azuretipsandtricks-micrum)");
                     }
                     else if(m.Value.Contains("docs.microsoft.com"))
                     {
-                        ReplaceText(filePath, m.Value, m.Value + "?WT.mc_id=docs-azuretipsandtricks-micrum");
+                        ReplaceText(filePath, "(" + m.Value + ")", "(" + m.Value + "?WT.mc_id=docs-azuretipsandtricks-micrum)");
                     }
                     else if (m.Value.Contains("github.com"))
                     {
@@ -93,8 +89,6 @@ namespace AddTrackingURL
                         Console.ForegroundColor = ConsoleColor.Red;
                         Console.ResetColor();
                     }
-
-                }
             }
         }
 
